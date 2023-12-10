@@ -35,6 +35,7 @@ export const AddTodo = (payload) => (dispatch) => {
   return axios
     .post(`https://sparkling-visor-deer.cyclic.app/Todo/add`, payload)
     .then((res) => {
+      dispatch(GetTodo());
       dispatch({ type: TODO_ADD_SUCCESS, payload: res.data });
     })
     .catch((err) => {

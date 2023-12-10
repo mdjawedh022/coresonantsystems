@@ -2,15 +2,16 @@ import { Box, Button, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { AddTodo } from "../redux/action";
 import { useDispatch } from "react-redux";
-// import { useDispatch } from "react-redux";
 
 const InputTodo = () => {
   const [title, setTitle] = useState("");
   const dispatch = useDispatch();
-  const handleAddTodo = (title) => {
-    dispatch(AddTodo({ title: title, status: false }));
-    setTitle("");
-  };
+ const handleAddTodo = () => {
+   if (title.trim() !== "") {
+     dispatch(AddTodo({ title, status: false }));
+     setTitle(""); 
+   }
+ };
 
   return (
     <>
