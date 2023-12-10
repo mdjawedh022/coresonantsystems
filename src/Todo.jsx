@@ -26,7 +26,6 @@ const Todo = () => {
         <Text>{currentDay}</Text>
         <Text textAlign={'center'} fontSize={'1.5rem'} m={'1rem 0'} fontWeight={'600'}>TODO LIST</Text>
 
-        <InputTodo />
         <List/>
       </Box>
     </>

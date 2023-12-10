@@ -3,15 +3,14 @@ import React, { useState } from "react";
 import { AddTodo } from "../redux/action";
 import { useDispatch } from "react-redux";
 
-const InputTodo = () => {
-  const [title, setTitle] = useState("");
+const InputTodo = ({ title, setTitle }) => {
   const dispatch = useDispatch();
- const handleAddTodo = () => {
-   if (title.trim() !== "") {
-     dispatch(AddTodo({ title, status: false }));
-     setTitle(""); 
-   }
- };
+  const handleAddTodo = () => {
+    if (title.trim() !== "") {
+      dispatch(AddTodo({ title, status: false }));
+      setTitle("");
+    }
+  };
 
   return (
     <>
