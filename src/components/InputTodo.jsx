@@ -1,20 +1,17 @@
-import { Box, Button, Input } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import { Box, Button, Input } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { AddTodo } from "../redux/action";
+import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 
 const InputTodo = () => {
-  const [input,setInput]=useState('')
-
-  const handelSubmit = () => {
-const data={
-        userId: 1,
-        id: input.length + 1, 
-        title: input,
-        completed: false
-      }
-    console.log(data);
-    setInput('')
+  const [title, setTitle] = useState("");
+  const dispatch = useDispatch();
+  const handleAddTodo = (title) => {
+    dispatch(AddTodo({ title: title, status: false }));
+    setTitle("");
   };
-  
+
   return (
     <>
       <Box
@@ -27,13 +24,15 @@ const data={
         <Input
           placeholder="add your task.."
           type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
-        <Button onClick={handelSubmit}border={"1px"}>Submit</Button>
+        <Button onClick={handleAddTodo} border={"1px"}>
+          Submit
+        </Button>
       </Box>
     </>
   );
-}
+};
 
-export default InputTodo
+export default InputTodo;

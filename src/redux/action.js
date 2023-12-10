@@ -1,49 +1,86 @@
-import axios from "axios";
 import {
-  DELETE_TODO,
-  GET_TODOS_FAILURE,
-  GET_TODOS_REQUEST,
-  GET_TODOS_SUCCESS,
+  TODO_ADD_ERROR,
+  TODO_ADD_REQUEST,
+  TODO_ADD_SUCCESS,
+  TODO_DELETE_ERROR,
+  TODO_DELETE_REQUEST,
+  TODO_DELETE_SUCCESS,
+  TODO_GET_ERROR,
+  TODO_GET_REQUEST,
+  TODO_GET_SUCCESS,
+  TODO_TOGGLE_COMPLETION_ERROR,
+  TODO_TOGGLE_COMPLETION_REQUEST,
+  TODO_TOGGLE_COMPLETION_SUCCESS,
+  TODO_UPDATE_ERROR,
+  TODO_UPDATE_REQUEST,
+  TODO_UPDATE_SUCCESS,
 } from "./actionType";
+import axios from "axios";
 
-const getTodosRequest = () => ({
-  type: GET_TODOS_REQUEST,
-});
-
-const getTodosSuccess = (todos) => ({
-  type: GET_TODOS_SUCCESS,
-  payload: todos,
-});
-
-const getTodosFailure = (error) => ({
-  type: GET_TODOS_FAILURE,
-  payload: error,
-});
-const deleteTodoSuccess = (id) => ({
-  type: DELETE_TODO,
-  payload: id,
-});
-export const fetchTodos = () => async (dispatch) => {
-  dispatch(getTodosRequest());
-
-  try {
-    const response = await axios.get(
-      "https://jsonplaceholder.typicode.com/users/1/todos"
-    );
-    const todos = response.data;
-    console.log(todos);
-    dispatch(getTodosSuccess(todos));
-  } catch (error) {
-    dispatch(getTodosFailure(error.message));
-  }
+export const GetTodo = () => (dispatch) => {
+  dispatch({ type: TODO_GET_REQUEST });
+  axios
+    .get(`https://sparkling-visor-deer.cyclic.app/Todo`)
+    .then((res) => {
+      console.log(res.data)
+      dispatch({ type: TODO_GET_SUCCESS, payload: res.data });
+    })
+    .catch((err) => {
+      dispatch({ type: TODO_GET_ERROR, error: err });
+    });
 };
-// -----------------------------------
 
-export const deleteTodo = (id) => async (dispatch) => {
-  try {
-    await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`);
-    dispatch(deleteTodoSuccess(id));
-  } catch (error) {
-    console.error("Error deleting todo:", error.message);
-  }
+export const AddTodo = (payload) => (dispatch) => {
+  dispatch({ type: TODO_ADD_REQUEST });
+  return axios
+    .post(`https://sparkling-visor-deer.cyclic.app/Todo/add`, payload)
+    .then((res) => {
+      dispatch({ type: TODO_ADD_SUCCESS, payload: res.data });
+    })
+    .catch((err) => {
+      dispatch({ type: TODO_ADD_ERROR, error: err });
+    });
+};
+
+export const DeletedTodo = (id) =>(dispatch) => {
+  dispatch({ type: TODO_DELETE_REQUEST });
+  return axios
+    .delete(`https://sparkling-visor-deer.cyclic.app/Todo/delete/${id}`)
+    .then(() => {
+      dispatch({ type: TODO_DELETE_SUCCESS, id: id });
+    })
+    .catch((err) => {
+      dispatch({ type: TODO_DELETE_ERROR, error: err });
+    });
+};
+
+export const UpdateTodo = (id, payload) => (dispatch) => {
+  dispatch({ type: TODO_UPDATE_REQUEST });
+  return axios
+    .patch(`https://sparkling-visor-deer.cyclic.app/Todo/update/${id}`, payload)
+    .then((res) => {
+      dispatch({ type: TODO_UPDATE_SUCCESS, payload: res.data, id: id });
+    })
+    .catch((err) => {
+      dispatch({ type: TODO_UPDATE_ERROR, error: err });
+    });
+};
+
+export const ToggleTodoCompletion = (id, status) => (dispatch) => {
+  dispatch({ type: TODO_TOGGLE_COMPLETION_REQUEST });
+  return axios
+    .put(`https://sparkling-visor-deer.cyclic.app/Todo/toggle/${id}`, {
+      status,
+    })
+    .then((res) => {
+      console.log("Toggle success:", res.data);
+      dispatch({
+        type: TODO_TOGGLE_COMPLETION_SUCCESS,
+        payload: res.data,
+        id: id,
+      });
+    })
+    .catch((err) => {
+      dispatch({ type: TODO_TOGGLE_COMPLETION_ERROR, error: err });
+    });
 };

@@ -4,6 +4,15 @@ import InputTodo from "./components/InputTodo";
 import List from "./components/List";
 
 const Todo = () => {
+    const options = {
+      month: "short",
+      day: "numeric",
+      weekday: "short",
+    };
+    const currentDay = new Date().toLocaleDateString(
+      undefined,
+      options
+    );
   return (
     <>
       <Box
@@ -14,6 +23,7 @@ const Todo = () => {
         borderRadius={"5px"}
         p={"1rem"}
       >
+        <Text>{currentDay}</Text>
         <Text textAlign={'center'} fontSize={'1.5rem'} m={'1rem 0'} fontWeight={'600'}>TODO LIST</Text>
 
         <InputTodo />
